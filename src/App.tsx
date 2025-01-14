@@ -1,8 +1,16 @@
+import { ButtonComponents } from "@/components/ui/button"
 import './App.css'
 
 function App() {
   return (
-    <h1 data-theme="dark" className={'text-4xl bg-auto text-center bg-gray-700 font-bold underline'}>Hello world!</h1>
+    <div className={"mx-auto my-auto"}>
+      <h1 className={'text-4xl p-4 text-center bg-gray-700 font-bold'}>
+        Spotify Me
+      </h1>
+      <div className={'flex justify-center py-10'}>
+        <ButtonComponents.Button>Button</ButtonComponents.Button>
+      </div>
+    </div>
   )
 }
 
