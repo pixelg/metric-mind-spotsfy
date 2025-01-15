@@ -2,7 +2,11 @@ import './App.css'
 
 function App() {
   return (
-    <h1 data-theme="dark" className={'text-4xl bg-auto text-center bg-gray-700 font-bold underline'}>Hello world!</h1>
+    <div className='bg-white text-black dark:bg-gray-800 dark:text-white'>
+      <div className='flex justify-center items-center h-screen w-screen'>
+        <h1 className={'text-4xl text-center font-bold'}>Welcome!</h1>
+      </div>
+    </div>
   )
 }
 

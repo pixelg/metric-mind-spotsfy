@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --primary-color: #ff0000;
-  --secondary-color: #242424;
+  /*--primary-color: #ff0000;*/
+  /*--secondary-color: #242424;*/
 
-  --dark-primary-color: #b3b3b3;
-  --dark-secondary-color: #367f8a;
+  /*--dark-primary-color: #b3b3b3;*/
+  /*--dark-secondary-color: #367f8a;*/
 
-  color: var(--primary-color);
-  background-color: var(--secondary-color);
+  /*color: var(--primary-color);*/
+  /*background-color: var(--secondary-color);*/
 }
 
-[data-theme="dark"] {
-  color: var(--dark-primary-color);
-  background-color: var(--dark-secondary-color);
-}
+/*[data-theme="dark"] {*/
+/*  color: var(--dark-primary-color);*/
+/*  background-color: var(--dark-secondary-color);*/
+/*}*/
 
