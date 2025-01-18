@@ -1,20 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  /*--primary-color: #ff0000;*/
-  /*--secondary-color: #242424;*/
-
-  /*--dark-primary-color: #b3b3b3;*/
-  /*--dark-secondary-color: #367f8a;*/
-
-  /*color: var(--primary-color);*/
-  /*background-color: var(--secondary-color);*/
+@layer base {
+  :root {
+    --radius: 0.5rem
+  }
 }
-
-/*[data-theme="dark"] {*/
-/*  color: var(--dark-primary-color);*/
-/*  background-color: var(--dark-secondary-color);*/
-/*}*/
 
