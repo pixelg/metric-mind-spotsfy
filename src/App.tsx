@@ -1,10 +1,16 @@
-import { ThemeProvider } from "@/components/theme-provider"
+import {Button} from "@/components/ui/button.tsx";
+import Layout from "@/components/Layout.tsx";
+import {ModeToggle} from "@/components/mode-toggle.tsx";
 
-function App({children} : {children: React.ReactNode}) {
+function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      {children}
-    </ThemeProvider>
+    <Layout>
+      <ModeToggle />
+      <div>
+        <h1>Hello World</h1>
+        <Button className='bg-amber-200 dark:bg-lime-500'>Click</Button>
+      </div>
+    </Layout>
   )
 }
 
