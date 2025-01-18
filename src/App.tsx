@@ -1,14 +1,16 @@
-import {Button} from "@/components/ui/button.tsx";
 import Layout from "@/components/Layout.tsx";
 import {ModeToggle} from "@/components/mode-toggle.tsx";
+import Widget from "@/components/ui/Widget.tsx";
 
 function App() {
   return (
     <Layout>
       <ModeToggle />
-      <div>
-        <h1>Hello World</h1>
-        <Button className='bg-amber-200 dark:bg-lime-500'>Click</Button>
+      <h1 className={'text-4xl text-center font-bold'}>Welcome!</h1>
+      <div className='flex justify-center items-center max-w-screen-lg h-screen m-auto'>
+        <Widget name={'Widget'} />
+        <Widget name={'Widget'} />
+        <Widget name={'Widget'} />
       </div>
     </Layout>
   )
