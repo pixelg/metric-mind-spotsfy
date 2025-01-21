@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/payments/data-table";
 import { Payment, columns } from "@/components/payments/columns";
+import {payments} from "@/components/payments/payments-data.ts";
 
 async function getData(): Promise<Payment[]> {
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ];
+  return payments;
 }
 
 export default function DataPage() {
