@@ -3,9 +3,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { AppSidebar } from "@/components/AppSidebar.tsx";
 import { ModeToggle } from "@/components/ModeToggle.tsx";
 
-export default function Layout({children} : {children: React.ReactNode}) {
+export default function BaseLayout({children} : {children: React.ReactNode}) {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="metric-mind-theme">
       <div className='container'>
         <SidebarProvider>
           <AppSidebar />

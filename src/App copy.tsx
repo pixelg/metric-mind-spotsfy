@@ -5,79 +5,29 @@ import { Button } from "./components/ui/button";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 
+// Create a client
 const queryClient = new QueryClient();
 
 const SPOTIFY_AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-const SPOTIFY_TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
-const REDIRECT_URI = "http://localhost:8888";
+const REDIRECT_URI = "http://localhost:8888/callback"; // Updated to match the dashboard
 const SCOPES = ["user-read-recently-played"];
 
-// PKCE Helper functions
-async function generateCodeChallenge(codeVerifier: string) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(codeVerifier);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return btoa(String.fromCharCode(...new Uint8Array(digest)))
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-}
-
-function generateCodeVerifier() {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return btoa(String.fromCharCode(...array))
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-}
-
 // Spotify API functions
-async function getAuthUrl() {
-  const codeVerifier = generateCodeVerifier();
-  const codeChallenge = await generateCodeChallenge(codeVerifier);
-  
-  // Store code verifier in localStorage to use it when exchanging code for token
-  localStorage.setItem('code_verifier', codeVerifier);
+function getAuthUrl() {
+  const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+  console.log('Client ID:', clientId);
   
   const params = new URLSearchParams({
-    client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-    response_type: 'code',
+    client_id: clientId,
     redirect_uri: REDIRECT_URI,
     scope: SCOPES.join(" "),
-    code_challenge_method: 'S256',
-    code_challenge: codeChallenge,
+    response_type: 'code',  // Changed from 'token' to 'code' for authorization code flow
     show_dialog: 'true'
   });
   
-  return `${SPOTIFY_AUTH_ENDPOINT}?${params.toString()}`;
-}
-
-async function exchangeCodeForToken(code: string) {
-  const codeVerifier = localStorage.getItem('code_verifier');
-  
-  const params = new URLSearchParams({
-    client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-    grant_type: 'authorization_code',
-    code,
-    redirect_uri: REDIRECT_URI,
-    code_verifier: codeVerifier!
-  });
-
-  const response = await fetch(SPOTIFY_TOKEN_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: params
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to exchange code for token');
-  }
-
-  const data = await response.json();
-  return data.access_token;
+  const url = `${SPOTIFY_AUTH_ENDPOINT}?${params.toString()}`;
+  console.log('Auth URL:', url);
+  return url;
 }
 
 async function getRecentlyPlayed(token: string) {
@@ -94,70 +44,42 @@ async function getRecentlyPlayed(token: string) {
   return response.json();
 }
 
-interface SpotifyArtist {
-  name: string;
-  id: string;
-  uri: string;
-}
-
-interface SpotifyImage {
-  url: string;
-  height: number;
-  width: number;
-}
-
-interface SpotifyAlbum {
-  images: SpotifyImage[];
-  name: string;
-}
-
-interface SpotifyTrack {
-  id: string;
-  name: string;
-  album: SpotifyAlbum;
-  artists: SpotifyArtist[];
-}
-
-interface RecentlyPlayedItem {
-  track: SpotifyTrack;
-  played_at: string;
-}
-
-interface RecentlyPlayedResponse {
-  items: RecentlyPlayedItem[];
-}
-
 function AppContent() {
   const [token, setToken] = useState('');
   
-  // Handle the OAuth callback
+  // Check for token in URL on component mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     
     if (code) {
-      exchangeCodeForToken(code)
-        .then(token => {
-          setToken(token);
-          // Clear the URL parameters
-          window.history.replaceState({}, document.title, window.location.pathname);
-        })
-        .catch(error => {
-          console.error('Error exchanging code for token:', error);
-        });
+      console.log('Received authorization code:', code);
+      // Here we would exchange the code for an access token
+      // For now, just log it to verify the flow works
+    }
+  }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const token = hash.substring(1).split('&').find(elem => elem.startsWith('access_token'))?.split('=')[1];
+      if (token) {
+        setToken(token);
+        // Clear the URL hash
+        window.location.hash = '';
+      }
     }
   }, []);
 
   // Recently played tracks query
-  const recentlyPlayedQuery = useQuery<RecentlyPlayedResponse>({
+  const recentlyPlayedQuery = useQuery({
     queryKey: ['recentlyPlayed'],
     queryFn: () => getRecentlyPlayed(token),
     enabled: !!token,
   });
 
-  const handleLogin = async () => {
-    const url = await getAuthUrl();
-    window.location.href = url;
+  const handleLogin = () => {
+    window.location.href = getAuthUrl();
   }
 
   if (!token) {
@@ -194,7 +116,7 @@ function AppContent() {
       {recentlyPlayedQuery.data && (
         <div className="max-w-4xl mx-auto px-4">
           <div className="space-y-4">
-            {recentlyPlayedQuery.data.items.map((item: RecentlyPlayedItem) => (
+            {recentlyPlayedQuery.data.items.map((item: any) => (
               <div key={item.played_at} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
                 <div className="flex items-center space-x-4">
                   {item.track.album.images[0] && (
@@ -207,7 +129,7 @@ function AppContent() {
                   <div>
                     <h3 className="font-semibold">{item.track.name}</h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      {item.track.artists.map((artist: SpotifyArtist) => artist.name).join(', ')}
+                      {item.track.artists.map((artist: any) => artist.name).join(', ')}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-500">
                       {new Date(item.played_at).toLocaleString()}
@@ -224,7 +146,7 @@ function AppContent() {
         <DataPage />
       </div>
     </BaseLayout>
-  );
+  )
 }
 
 function App() {
