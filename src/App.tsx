@@ -1,14 +1,17 @@
 import BaseLayout from "@/components/BaseLayout";
-// import Widget from "@/components/ui/Widget";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import DataPage from "@/components/payments/page";
 import { Button } from "./components/ui/button";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { SpotifyCallback } from "./components/SpotifyCallback";
+import { RecentlyPlayedItem, RecentlyPlayedResponse, SpotifyArtist } from "./types/SpotifyTypes";
 
 const queryClient = new QueryClient();
 
 const SPOTIFY_AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-const SPOTIFY_TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
+// const SPOTIFY_TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 const REDIRECT_URI = "http://localhost:5173/callback";
 const SCOPES = ["user-read-recently-played"];
 
@@ -53,32 +56,32 @@ async function getAuthUrl() {
   return `${SPOTIFY_AUTH_ENDPOINT}?${params.toString()}`;
 }
 
-async function exchangeCodeForToken(code: string) {
-  const codeVerifier = localStorage.getItem('code_verifier');
+// async function exchangeCodeForToken(code: string) {
+//   const codeVerifier = localStorage.getItem('code_verifier');
   
-  const params = new URLSearchParams({
-    client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-    grant_type: 'authorization_code',
-    code,
-    redirect_uri: REDIRECT_URI,
-    code_verifier: codeVerifier!
-  });
+//   const params = new URLSearchParams({
+//     client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
+//     grant_type: 'authorization_code',
+//     code,
+//     redirect_uri: REDIRECT_URI,
+//     code_verifier: codeVerifier!
+//   });
 
-  const response = await fetch(SPOTIFY_TOKEN_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: params
-  });
+//   const response = await fetch(SPOTIFY_TOKEN_ENDPOINT, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded'
+//     },
+//     body: params
+//   });
 
-  if (!response.ok) {
-    throw new Error('Failed to exchange code for token');
-  }
+//   if (!response.ok) {
+//     throw new Error('Failed to exchange code for token');
+//   }
 
-  const data = await response.json();
-  return data.access_token;
-}
+//   const data = await response.json();
+//   return data.access_token;
+// }
 
 async function getRecentlyPlayed(token: string) {
   const response = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
@@ -94,57 +97,25 @@ async function getRecentlyPlayed(token: string) {
   return response.json();
 }
 
-interface SpotifyArtist {
-  name: string;
-  id: string;
-  uri: string;
-}
-
-interface SpotifyImage {
-  url: string;
-  height: number;
-  width: number;
-}
-
-interface SpotifyAlbum {
-  images: SpotifyImage[];
-  name: string;
-}
-
-interface SpotifyTrack {
-  id: string;
-  name: string;
-  album: SpotifyAlbum;
-  artists: SpotifyArtist[];
-}
-
-interface RecentlyPlayedItem {
-  track: SpotifyTrack;
-  played_at: string;
-}
-
-interface RecentlyPlayedResponse {
-  items: RecentlyPlayedItem[];
-}
-
 function AppContent() {
   const [token, setToken] = useState('');
   
   // Handle the OAuth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+    const urlParamToken = urlParams.get('token');
     
-    if (code) {
-      exchangeCodeForToken(code)
-        .then(token => {
-          setToken(token);
-          // Clear the URL parameters
-          window.history.replaceState({}, document.title, window.location.pathname);
-        })
-        .catch(error => {
-          console.error('Error exchanging code for token:', error);
-        });
+    if (urlParamToken) {
+      setToken(urlParamToken);
+      // exchangeCodeForToken(code)
+      //   .then(token => {
+      //     setToken(token);
+      //     // Clear the URL parameters
+      //     window.history.replaceState({}, document.title, window.location.pathname);
+      //   })
+      //   .catch(error => {
+      //     console.error('Error exchanging code for token:', error);
+      //   });
     }
   }, []);
 
@@ -192,7 +163,7 @@ function AppContent() {
       )}
 
       {recentlyPlayedQuery.data && (
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-4xl max-h-4xl mx-auto px-4">
           <div className="space-y-4">
             {recentlyPlayedQuery.data.items.map((item: RecentlyPlayedItem) => (
               <div key={item.played_at} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
@@ -230,7 +201,12 @@ function AppContent() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppContent />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/callback" element={<SpotifyCallback onAuthSuccess={(token) => window.location.href = `/?token=${token}`} />} />
+          <Route path="/" element={<AppContent />} />
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   )
 }

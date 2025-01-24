@@ -15,7 +15,7 @@ export default function BaseLayout({children} : {children: React.ReactNode}) {
                 <ModeToggle />
               </div>
 
-              <div className='w-screen h-screen bg-white text-black dark:bg-gray-800 dark:text-white'>
+              <div className='w-screen h-content bg-white text-black dark:bg-gray-800 dark:text-white'>
                 {children}
               </div>
             </main>
