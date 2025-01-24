@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 
 const SPOTIFY_AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const SPOTIFY_TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
-const REDIRECT_URI = "http://localhost:8888";
+const REDIRECT_URI = "http://localhost:5173/callback";
 const SCOPES = ["user-read-recently-played"];
 
 // PKCE Helper functions
