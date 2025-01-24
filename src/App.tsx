@@ -1,12 +1,11 @@
 import BaseLayout from "@/components/BaseLayout";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-import DataPage from "@/components/payments/page";
-import { Button } from "./components/ui/button";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import { SpotifyCallback } from "./components/SpotifyCallback";
-import { RecentlyPlayedItem, RecentlyPlayedResponse, SpotifyArtist } from "./types/SpotifyTypes";
+import {Button} from "./components/ui/button";
+import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query";
+import {useEffect, useState} from "react";
+import {SpotifyCallback} from "./components/SpotifyCallback";
+import {RecentlyPlayedItem, RecentlyPlayedResponse, SpotifyArtist} from "./types/SpotifyTypes";
 
 const queryClient = new QueryClient();
 
@@ -107,15 +106,6 @@ function AppContent() {
     
     if (urlParamToken) {
       setToken(urlParamToken);
-      // exchangeCodeForToken(code)
-      //   .then(token => {
-      //     setToken(token);
-      //     // Clear the URL parameters
-      //     window.history.replaceState({}, document.title, window.location.pathname);
-      //   })
-      //   .catch(error => {
-      //     console.error('Error exchanging code for token:', error);
-      //   });
     }
   }, []);
 
@@ -127,8 +117,7 @@ function AppContent() {
   });
 
   const handleLogin = async () => {
-    const url = await getAuthUrl();
-    window.location.href = url;
+    window.location.href = await getAuthUrl();
   }
 
   if (!token) {
@@ -191,9 +180,9 @@ function AppContent() {
         </div>
       )}
 
-      <div className="min-w-fit lg:w-1/2 p-4 m-auto">
-        <DataPage />
-      </div>
+      {/*<div className="min-w-fit lg:w-1/2 p-4 m-auto">*/}
+      {/*  <DataPage />*/}
+      {/*</div>*/}
     </BaseLayout>
   );
 }
