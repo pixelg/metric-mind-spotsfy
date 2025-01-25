@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton, SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import {ProfileAvatar} from "@/components/ProfileAvatar.tsx";
 
 const items = [
   {
@@ -42,6 +43,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel><ProfileAvatar /></SidebarGroupLabel>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>

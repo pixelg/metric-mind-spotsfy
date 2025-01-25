@@ -6,6 +6,7 @@ import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query"
 import {useEffect, useState} from "react";
 import {SpotifyCallback} from "./components/SpotifyCallback";
 import {RecentlyPlayedItem, RecentlyPlayedResponse, SpotifyArtist} from "./types/SpotifyTypes";
+import {AuthProfileContext} from "@/contexts/AuthProfileContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -83,7 +84,7 @@ async function getAuthUrl() {
 // }
 
 async function getRecentlyPlayed(token: string) {
-  const response = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
+  const response = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=30', {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -126,7 +127,7 @@ function AppContent() {
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h1 className="text-3xl font-bold mb-8">Welcome to Spotify History</h1>
           <Button 
-            variant='outline' 
+            variant='outline'
             className="bg-green-500 hover:bg-green-600 text-white"
             onClick={handleLogin}
           >
@@ -138,52 +139,50 @@ function AppContent() {
   }
 
   return (
-    <BaseLayout>
-      <h1 className={'text-3xl text-center font-bold w-screen mb-8'}>Your Recently Played Tracks</h1>
-      
-      {recentlyPlayedQuery.isPending && (
-        <div className="text-center">Loading your recently played tracks...</div>
-      )}
+    <AuthProfileContext value={{userName: "Brent"}}>
+      <BaseLayout>
+        <h1 className={'text-3xl text-center font-bold w-screen mb-8'}>Your Recently Played Tracks</h1>
 
-      {recentlyPlayedQuery.isError && (
-        <div className="text-red-500 text-center mt-4">
-          Error fetching your recently played tracks!
-        </div>
-      )}
+        {recentlyPlayedQuery.isPending && (
+          <div className="text-center">Loading your recently played tracks...</div>
+        )}
 
-      {recentlyPlayedQuery.data && (
-        <div className="max-w-4xl max-h-4xl mx-auto px-4">
-          <div className="space-y-4">
-            {recentlyPlayedQuery.data.items.map((item: RecentlyPlayedItem) => (
-              <div key={item.played_at} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-                <div className="flex items-center space-x-4">
-                  {item.track.album.images[0] && (
-                    <img 
-                      src={item.track.album.images[0].url} 
-                      alt={item.track.album.name}
-                      className="w-16 h-16 rounded"
-                    />
-                  )}
-                  <div>
-                    <h3 className="font-semibold">{item.track.name}</h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {item.track.artists.map((artist: SpotifyArtist) => artist.name).join(', ')}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500">
-                      {new Date(item.played_at).toLocaleString()}
-                    </p>
+        {recentlyPlayedQuery.isError && (
+          <div className="text-red-500 text-center mt-4">
+            Error fetching your recently played tracks!
+          </div>
+        )}
+
+        {recentlyPlayedQuery.data && (
+          <div className="max-w-4xl max-h-4xl mx-auto px-4">
+            <div className="space-y-4">
+              {recentlyPlayedQuery.data.items.map((item: RecentlyPlayedItem) => (
+                <div key={item.played_at} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
+                  <div className="flex items-center space-x-4">
+                    {item.track.album.images[0] && (
+                      <img
+                        src={item.track.album.images[0].url}
+                        alt={item.track.album.name}
+                        className="w-16 h-16 rounded"
+                      />
+                    )}
+                    <div>
+                      <h3 className="font-semibold">{item.track.name}</h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {item.track.artists.map((artist: SpotifyArtist) => artist.name).join(', ')}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-500">
+                        {new Date(item.played_at).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-
-      {/*<div className="min-w-fit lg:w-1/2 p-4 m-auto">*/}
-      {/*  <DataPage />*/}
-      {/*</div>*/}
-    </BaseLayout>
+        )}
+      </BaseLayout>
+    </AuthProfileContext>
   );
 }
 
