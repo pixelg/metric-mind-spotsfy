@@ -2,9 +2,7 @@ import {ReactNode, useEffect, useState} from "react";
 import {AuthState, initAuthState} from "@/components/auth/types/AuthTypes.tsx";
 import {AuthContext} from "@/components/auth/contexts/AuthContext.tsx";
 
-const storageKey = "metric-minds-auth-state";
-
-export const SpotifyAuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children, storageKey = "auth"}: { children: ReactNode, storageKey: string }) => {
   const [authState, setAuthState] = useState<AuthState>(initAuthState);
 
   // Load auth state from localStorage on mount
