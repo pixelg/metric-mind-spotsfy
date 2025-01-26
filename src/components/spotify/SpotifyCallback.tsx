@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import {useAuthFlow} from "@/components/auth/hooks/useAuthFlow.tsx";
+
+const SPOTIFY_TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 
 interface SpotifyCallbackProps {
   onAuthSuccess: (token: string) => void;
@@ -8,6 +11,7 @@ interface SpotifyCallbackProps {
 export function SpotifyCallback({ onAuthSuccess }: SpotifyCallbackProps) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { setAuthState } = useAuthFlow();
 
   useEffect(() => {
     async function handleCallback() {
@@ -27,7 +31,7 @@ export function SpotifyCallback({ onAuthSuccess }: SpotifyCallbackProps) {
       }
 
       try {
-        const response = await fetch('https://accounts.spotify.com/api/token', {
+        const response = await fetch(SPOTIFY_TOKEN_ENDPOINT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -46,7 +50,17 @@ export function SpotifyCallback({ onAuthSuccess }: SpotifyCallbackProps) {
         }
 
         const data = await response.json();
-        onAuthSuccess(data.access_token);
+        if (data.access_token){
+          setAuthState({
+            isAuthenticated: true,
+            shouldRefresh: !!data.refresh_token,
+            accessToken: data.access_token,
+            refreshToken: data.refresh_token || ""
+          });
+
+          onAuthSuccess(data.access_token);
+        }
+
         navigate('/');
       } catch (err) {
         console.error('Error exchanging code for token:', err);
@@ -55,7 +69,7 @@ export function SpotifyCallback({ onAuthSuccess }: SpotifyCallbackProps) {
     }
 
     handleCallback();
-  }, [searchParams, navigate, onAuthSuccess]);
+  }, [searchParams, setAuthState, navigate, onAuthSuccess]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

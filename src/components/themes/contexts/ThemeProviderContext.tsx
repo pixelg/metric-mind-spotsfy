@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {Theme} from "@/types/ThemeTypes.tsx";
+import {Theme} from "@/components/themes/types/ThemeTypes.tsx";
 
 type ThemeProviderState = {
   theme: Theme

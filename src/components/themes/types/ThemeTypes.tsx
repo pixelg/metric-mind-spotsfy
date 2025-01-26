@@ -1,7 +1,8 @@
+import { ReactNode } from "react"
 export type Theme = "dark" | "light" | "system"
 
 export type ThemeProviderProps = {
-  children: React.ReactNode
+  children: ReactNode
   defaultTheme?: Theme
   storageKey?: string
 }

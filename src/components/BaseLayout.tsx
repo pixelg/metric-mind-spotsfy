@@ -1,9 +1,10 @@
-import { ThemeProvider } from "@/components/ThemeProvider.tsx";
+import { ReactNode } from "react";
+import { ThemeProvider } from "@/components/themes/ThemeProvider.tsx";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { AppSidebar } from "@/components/AppSidebar.tsx";
-import { ModeToggle } from "@/components/ModeToggle.tsx";
+import { ModeToggle } from "@/components/themes/ModeToggle.tsx";
 
-export default function BaseLayout({children} : {children: React.ReactNode}) {
+export default function BaseLayout({children} : {children: ReactNode}) {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="metric-mind-theme">
       <div className='container'>
