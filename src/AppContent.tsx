@@ -1,37 +1,48 @@
 import {useQuery} from "@tanstack/react-query";
-import {RecentlyPlayedItem, RecentlyPlayedResponse, SpotifyArtist} from "@/components/spotify/types/SpotifyTypes.ts";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import {
+  RecentlyPlayedItem,
+  RecentlyPlayedResponse,
+  SpotifyArtist,
+} from "@/components/spotify/types/SpotifyTypes.ts";
 import BaseLayout from "@/components/BaseLayout.tsx";
-import {SpotifyAuth} from "@/components/spotify/SpotifyAuth.tsx";
-import {useAuthFlow} from "@/components/auth/hooks/useAuthFlow.tsx";
+import { SpotifyAuth } from "@/components/spotify/SpotifyAuth.tsx";
+import { useAuthHook } from "@/components/auth/hooks/useAuthHook.tsx";
+import { AuthState } from "@/components/auth/types/AuthTypes.tsx";
 
-const RECENTLY_PLAYED_URL = 'https://api.spotify.com/v1/me/player/recently-played';
+const RECENTLY_PLAYED_URL =
+  "https://api.spotify.com/v1/me/player/recently-played";
 
-async function getRecentlyPlayed(token: string) {
+async function getRecentlyPlayed(
+  authState: AuthState,
+  navigate: NavigateFunction,
+) {
   const response = await fetch(RECENTLY_PLAYED_URL, {
     headers: {
-      'Authorization': `Bearer ${token}`
-    }
+      Authorization: `Bearer ${authState.accessToken}`,
+    },
   });
 
   if (response.status === 401) {
     // check for refresh token and use it if available
-    console.log('Unauthorized');
-    throw new Error('Unauthorized');
+    authState.setAccessToken('');
+    navigate("/");
   }
 
   if (!response.ok) {
-    throw new Error('Failed to fetch recently played tracks');
+    throw new Error("Failed to fetch recently played tracks");
   }
 
   return response.json();
 }
 
 export function AppContent() {
-  const { authState } = useAuthFlow();
-
+  const { authState } = useAuthHook();
+  const navigate = useNavigate();
+  
   const recentlyPlayedQuery = useQuery<RecentlyPlayedResponse>({
     queryKey: ['recentlyPlayed'],
-    queryFn: () => getRecentlyPlayed(authState.accessToken),
+    queryFn: () => getRecentlyPlayed(authState, navigate),
     enabled: authState.isAuthenticated,
   });
 
