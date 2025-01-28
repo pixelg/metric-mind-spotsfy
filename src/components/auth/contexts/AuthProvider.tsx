@@ -46,8 +46,8 @@ export const AuthProvider = ({ children}: { children: ReactNode }) => {
   }, [accessToken, refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ authFlowType: "PKCE",  authState }}>
+    <AuthContext value={authState}>
       {children}
-    </AuthContext.Provider>
+    </AuthContext>
   );
 };

@@ -11,7 +11,7 @@ interface SpotifyCallbackProps {
 export function SpotifyCallback({ onAuthSuccess }: SpotifyCallbackProps) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { authState } = useAuthHook();
+  const authState = useAuthHook();
 
   useEffect(() => {
     async function handleCallback() {

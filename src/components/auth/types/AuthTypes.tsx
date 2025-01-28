@@ -8,8 +8,3 @@ export type AuthState = {
   setAccessToken: (accessToken: string) => void;
   setRefreshToken: (refreshToken: string) => void;
 };
-
-export interface AuthContextProvider {
-  authFlowType: AuthFlowType;
-  authState: AuthState;
-}
