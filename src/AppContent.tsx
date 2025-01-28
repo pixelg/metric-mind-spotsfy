@@ -37,7 +37,7 @@ async function getRecentlyPlayed(
 }
 
 export function AppContent() {
-  const { authState } = useAuthHook();
+  const authState = useAuthHook();
   const navigate = useNavigate();
   
   const recentlyPlayedQuery = useQuery<RecentlyPlayedResponse>({
