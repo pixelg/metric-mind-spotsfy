@@ -1,12 +1,30 @@
-import './App.css'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
+import {SpotifyAuthHandler} from "./components/spotify/SpotifyAuthHandler.tsx";
+import {AppContent} from "@/AppContent.tsx";
+import {AuthProvider} from "@/components/auth/contexts/AuthProvider.tsx";
+import RecentlyPlayed from "@/components/spotify/RecentlyPlayed.tsx";
+
+const queryClient = new QueryClient();
 
 function App() {
+
   return (
-    <div className='bg-white text-black dark:bg-gray-800 dark:text-white'>
-      <div className='flex justify-center items-center h-screen w-screen'>
-        <h1 className={'text-4xl text-center font-bold'}>Welcome!</h1>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/callback" element={<SpotifyAuthHandler
+              onAuthSuccess={() => window.location.href="/"}
+              onAuthFailure={(error) => {console.log(error); window.location.href="/error"}}
+            />}
+            />
+            <Route path="/" element={<AppContent />} />
+            <Route path="/recently-played" element={<RecentlyPlayed />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }
 
