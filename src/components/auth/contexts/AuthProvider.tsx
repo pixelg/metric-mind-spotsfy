@@ -3,50 +3,42 @@ import { AuthState } from "@/components/auth/types/AuthTypes.tsx";
 import { AuthContext } from "@/components/auth/contexts/AuthContext.tsx";
 
 const storageKey = "metric-minds-auth-state";
+const initAuthState = {
+  accessToken: "",
+  tokenType: "",
+  isAuthenticated: false,
+  scope: "",
+  expiresIn: 0,
+  refreshToken: "",
+}
 
 export const AuthProvider = ({ children}: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [shouldRefresh, setShouldRefresh] = useState(false);
-  const [accessToken, setAccessTokenInternal] = useState("");
-  const [refreshToken, setRefreshTokenInternal] = useState("");
-
-  const setAccessToken = (token: string) => {
-    setAccessTokenInternal(token);
-    setIsAuthenticated(!!token);
-  }
-
-  const setRefreshToken = (token: string) => {
-    setRefreshTokenInternal(token);
-    setShouldRefresh(!!token);
-  }
-
-  const authState : AuthState = {
-    isAuthenticated,
-    shouldRefresh,
-    accessToken,
-    refreshToken,
-    setAccessToken,
-    setRefreshToken,
-  }
+  const [ authState, setAuthState ] = useState<AuthState>(() => {
+    const savedAuthState = localStorage.getItem(storageKey);
+    try {
+      return savedAuthState ? JSON.parse(savedAuthState!) as AuthState : initAuthState;
+    } catch (e) {
+      console.error("Error parsing auth state from localStorage", e);
+      return initAuthState;
+    }
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load auth state from localStorage on mount
   useEffect(() => {
-    const savedAuthState = localStorage.getItem(storageKey);
-    if (savedAuthState) {
-      const parsedState = JSON.parse(savedAuthState);
-      setAccessToken(parsedState.accessToken || "");
-      setRefreshToken(parsedState.refreshToken || "");
-    }
+    setIsLoading(false);
   }, []);
 
   // Save auth state into localStorage on changes
   useEffect(() => {
-    const state = { accessToken, refreshToken };
-    localStorage.setItem(storageKey, JSON.stringify(state));
-  }, [accessToken, refreshToken]);
+    if (isLoading) return;
+
+    console.log("Saving auth state to localStorage", authState);
+    localStorage.setItem(storageKey, JSON.stringify(authState));
+  }, [authState, isLoading]);
 
   return (
-    <AuthContext value={authState}>
+    <AuthContext value={{authState, setAuthState}}>
       {children}
     </AuthContext>
   );
