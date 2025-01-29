@@ -8,7 +8,6 @@ import RecentlyPlayed from "@/components/spotify/RecentlyPlayed.tsx";
 const queryClient = new QueryClient();
 
 function App() {
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -16,7 +15,7 @@ function App() {
           <Routes>
             <Route path="/callback" element={<SpotifyAuthHandler
               onAuthSuccess={() => window.location.href="/"}
-              onAuthFailure={(error) => {console.log(error); window.location.href="/error"}}
+              onAuthFailure={(error) => {console.log(error);}}
             />}
             />
             <Route path="/" element={<AppContent />} />
