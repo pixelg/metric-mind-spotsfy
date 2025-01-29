@@ -7,7 +7,7 @@ import {
 import BaseLayout from "@/components/BaseLayout.tsx";
 import { AuthContextProps } from "@/components/auth/contexts/AuthContext.tsx";
 import {useAuthHook} from "@/components/auth/hooks/useAuthHook.tsx";
-import {SpotifyAuth} from "@/components/spotify/SpotifyAuth.tsx";
+import {Login} from "@/components/Login.tsx";
 
 const RECENTLY_PLAYED_URL =
   "https://api.spotify.com/v1/me/player/recently-played";
@@ -44,7 +44,7 @@ export function RecentlyPlayed() {
 
   if (!authContextProps.authState || !authContextProps.authState.isAuthenticated) {
     return (
-      <SpotifyAuth />
+      <Login />
     );
   }
 

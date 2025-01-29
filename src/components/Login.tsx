@@ -45,7 +45,7 @@ async function getAuthUrl() {
   return `${SPOTIFY_AUTH_ENDPOINT}?${params.toString()}`;
 }
 
-export function SpotifyAuth() {
+export function Login() {
   const handleLogin = async () => {
     window.location.href = await getAuthUrl();
   }
