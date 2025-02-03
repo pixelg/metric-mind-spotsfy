@@ -50,48 +50,54 @@ export function RecentlyPlayed() {
 
   return (
     <BaseLayout>
-      <h1 className={'text-3xl indent-4 font-bold px-3.5 py-10'}>Your Recently Played Tracks</h1>
+      {/* Full-screen background with muted blue */}
+      <div className="w-screen min-h-screen opacity-2 bg-gray-100 dark:bg-gray-800 flex flex-col items-start p-4">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center text-zinc-800 dark:text-zinc-200">
+          Your Recently Played Tracks
+        </h1>
 
-      {recentlyPlayedQuery.isPending && (
-        <div className="text-center">Loading your recently played tracks...</div>
-      )}
+        {/* Display loading, error, or the recently played tracks */}
+        {recentlyPlayedQuery.isPending && (
+          <div className="text-center">Loading your recently played tracks...</div>
+        )}
 
-      {recentlyPlayedQuery.isError && (
-        <div className="text-red-500 text-center mt-4">
-          Error fetching your recently played tracks!
-        </div>
-      )}
+        {recentlyPlayedQuery.isError && (
+          <div className="text-red-500 text-center mt-4">
+            Error fetching your recently played tracks!
+          </div>
+        )}
 
-      {recentlyPlayedQuery.data && (
-        <div className="max-w-5xl max-h-4xl mx-10 px-3.5">
-          <div className="space-y-2">
+        {recentlyPlayedQuery.data && (
+          <div className="w-11/12 md:w-3/4 lg:w-2/3 space-y-4">
             {recentlyPlayedQuery.data.items.map((item: RecentlyPlayedItem) => (
-              <div key={item.played_at} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-                <div className="flex items-center space-x-4">
-                  {item.track.album.images[0] && (
-                    <img
-                      src={item.track.album.images[0].url}
-                      alt={item.track.album.name}
-                      className="w-16 h-16 rounded"
-                    />
-                  )}
-                  <div>
-                    <h3 className="font-semibold">{item.track.name}</h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {item.track.artists.map((artist: SpotifyArtist) => artist.name).join(', ')}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500">
-                      {new Date(item.played_at).toLocaleString()}
-                    </p>
-                  </div>
+              <div key={item.played_at} className="bg-white dark:bg-gray-700 rounded-lg p-4 shadow-lg flex items-center space-x-4">
+                {/* Album Cover */}
+                {item.track.album.images[0] && (
+                  <img
+                    src={item.track.album.images[0].url}
+                    alt={item.track.album.name}
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded"
+                  />
+                )}
+
+                {/* Track and Artist Info */}
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-500 dark:text-amber-100 opacity-70">{item.track.name}</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">
+                    {item.track.artists.map((artist: SpotifyArtist) => artist.name).join(", ")}
+                  </p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                    {new Date(item.played_at).toLocaleString()}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </BaseLayout>
   );
+
 }
 
 export default RecentlyPlayed;

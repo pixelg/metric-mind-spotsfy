@@ -3,19 +3,13 @@ import BaseLayout from "@/components/BaseLayout.tsx";
 function Welcome() {
   return (
     <BaseLayout>
-      <div className="container mx-auto p-10">
-        <h1>Welcome to Metric Mind Jams!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque suscipit
+      <div className="container mx-auto p-6 md:p-10 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-800 dark:text-gray-200 shadow-md">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4 text-blue-300 dark:text-blue-400">
+          Welcome to Metric Mind Jams!
+        </h1>
+        <p className="text-sm md:text-base leading-relaxed">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque suscipit
           ligula et porttitor lacinia. Praesent blandit augue nec feugiat mattis.
-          Integer efficitur, odio non ultrices dictum, felis turpis aliquam nulla,
-          sed convallis augue ante sit amet urna. Mauris ut mattis felis, nec
-          tristique tellus. Proin dictum libero nec dolor sodales, id hendrerit nibh
-          fermentum. Vestibulum hendrerit nisl at lacus fermentum, ac congue ligula
-          malesuada. Pellentesque gravida viverra nunc vel convallis. Aliquam
-          pulvinar metus a sem rhoncus accumsan. Sed congue, nisi eget venenatis
-          imperdiet, lacus lorem sodales massa, vel pulvinar augue lacus et arcu.
-          Nullam pretium, arcu vitae volutpat rhoncus, ipsum eros tincidunt velit,
-          id feugiat neque lacus vel odio.
         </p>
       </div>
     </BaseLayout>

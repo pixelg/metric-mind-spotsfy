@@ -52,14 +52,16 @@ export function Login() {
 
   return <BaseLayout>
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-3xl font-bold mb-8">Metric Mind Jams Login</h1>
-      <Button
-        variant="outline"
-        className="bg-green-500 hover:bg-green-600 text-white"
-        onClick={handleLogin}
-      >
-        Login with Spotify
-      </Button>
+      <div className="border-2 dark:border-stone-500 dark:border-opacity-40 items-center justify-center flex flex-col p-10 rounded-2xl">
+        <h1 className="text-3xl font-bold mb-4">Metric Mind Jams</h1>
+        <Button
+          variant="outline"
+          className="bg-green-500 hover:bg-green-600 text-white dark:text-orange-500 border-2 text-italic"
+          onClick={handleLogin}
+        >
+          Login with Spotify
+        </Button>
+    </div>
     </div>
   </BaseLayout>;
 }
