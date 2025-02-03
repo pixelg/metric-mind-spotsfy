@@ -27,6 +27,7 @@
     "lucide-react": "^0.473.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-query-auth": "^2.4.3",
     "react-router-dom": "^7.1.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
