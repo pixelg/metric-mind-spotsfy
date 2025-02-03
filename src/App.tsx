@@ -4,6 +4,7 @@ import {SpotifyAuthHandler} from "./components/spotify/SpotifyAuthHandler.tsx";
 import {AppContent} from "@/AppContent.tsx";
 import {AuthProvider} from "@/components/auth/contexts/AuthProvider.tsx";
 import RecentlyPlayed from "@/components/spotify/RecentlyPlayed.tsx";
+import PlayerQueue from "@/components/spotify/PlayerQueue.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function App() {
             />
             <Route path="/" element={<AppContent />} />
             <Route path="/recently-played" element={<RecentlyPlayed />} />
+            <Route path="/player-queue" element={<PlayerQueue />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

@@ -25,3 +25,8 @@ export interface RecentlyPlayedItem {
 export interface RecentlyPlayedResponse {
   items: RecentlyPlayedItem[];
 }
+
+export interface PlayerQueueResponse {
+  currently_playing: SpotifyTrack;
+  queue: SpotifyTrack[];
+}

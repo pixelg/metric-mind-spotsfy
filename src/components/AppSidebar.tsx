@@ -21,8 +21,13 @@ const items = [
     icon: Home
   },
   {
+    title: "Player Queue",
+    url: "/player-queue",
+    icon: Search
+  },
+  {
     title: "Recently Played",
-    url: "/recently-played#",
+    url: "/recently-played",
     icon: Search
   },
   {

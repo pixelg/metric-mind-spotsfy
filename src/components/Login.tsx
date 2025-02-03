@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button.tsx";
 
 const SPOTIFY_AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 const REDIRECT_URI = "http://localhost:5173/callback";
-const SCOPES = ["user-read-recently-played"];
+const SCOPES = ["user-read-recently-played", "user-read-currently-playing", "user-read-playback-state"];
 
 // PKCE Helper functions
 async function generateCodeChallenge(codeVerifier: string) {
