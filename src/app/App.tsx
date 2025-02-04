@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
-import {SpotifyAuthHandler} from "./components/spotify/SpotifyAuthHandler.tsx";
-import {AppContent} from "@/AppContent.tsx";
+import {SpotifyAuthHandler} from "@/components/spotify/SpotifyAuthHandler.tsx";
+import {AppContent} from "@/app/AppContent.tsx";
 import {AuthProvider} from "@/components/auth/contexts/AuthProvider.tsx";
 import RecentlyPlayed from "@/components/spotify/RecentlyPlayed.tsx";
 import PlayerQueue from "@/components/spotify/PlayerQueue.tsx";

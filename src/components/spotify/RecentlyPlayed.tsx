@@ -3,7 +3,7 @@ import {
   RecentlyPlayedItem,
   RecentlyPlayedResponse,
   SpotifyArtist,
-} from "@/components/spotify/types/SpotifyTypes.ts";
+} from "@/types/spotify-types.ts";
 import BaseLayout from "@/components/BaseLayout.tsx";
 import { AuthContextProps } from "@/components/auth/contexts/AuthContext.tsx";
 import {useAuthHook} from "@/components/auth/hooks/useAuthHook.tsx";
