@@ -1,32 +1,24 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
-import {SpotifyAuthHandler} from "@/components/spotify/SpotifyAuthHandler.tsx";
-import {AppContent} from "@/app/AppContent.tsx";
-import {AuthProvider} from "@/components/auth/contexts/AuthProvider.tsx";
-import RecentlyPlayed from "@/components/spotify/RecentlyPlayed.tsx";
-import PlayerQueue from "@/components/spotify/PlayerQueue.tsx";
+import { AppProvider } from "@/app/AppProvider.tsx";
+import { AppRouter } from "@/app/AppRouter.tsx";
 
-const queryClient = new QueryClient();
-
-function App() {
+/**
+ * The top-level component for the application.
+ *
+ * This component wraps the entire app with the {@link AppProvider} and {@link AppRouter}
+ * components. It provides the global state and routing configuration for the app.
+ *
+ * Note that the {@link AppRouter} component is responsible for rendering the routes defined
+ * in the {@link AppRouter} component. The routes are defined in the {@link AppRouter} component
+ * as a list of {@link Route} components.
+ *
+ * @returns The rendered app component tree.
+ */
+export const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/callback" element={<SpotifyAuthHandler
-              onAuthSuccess={() => window.location.href="/"}
-              onAuthFailure={(error) => {console.log(error);}}
-            />}
-            />
-            <Route path="/" element={<AppContent />} />
-            <Route path="/recently-played" element={<RecentlyPlayed />} />
-            <Route path="/player-queue" element={<PlayerQueue />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </QueryClientProvider>
-  )
-}
+    <AppProvider>
+      <AppRouter />
+    </AppProvider>
+  );
+};
 
-export default App
+export default App;

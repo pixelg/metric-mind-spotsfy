@@ -19,15 +19,4 @@ export type User = Entity<{
   lastName: string;
   email: string;
   role: 'ADMIN' | 'USER';
-}>;
-
-export type AuthResponse = {
-  access_token: string;
-  token_type: string;
-  scope: string;
-  expires_in: number;
-  refresh_token: string;
-  user: User;
-};
-
-
+}>

@@ -1,30 +1,19 @@
-import {useQuery} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   RecentlyPlayedItem,
   RecentlyPlayedResponse,
   SpotifyArtist,
 } from "@/types/spotify-types.ts";
-import BaseLayout from "@/components/BaseLayout.tsx";
-import { AuthContextProps } from "@/components/auth/contexts/AuthContext.tsx";
-import {useAuthHook} from "@/components/auth/hooks/useAuthHook.tsx";
-import {Login} from "@/components/Login.tsx";
 
 const RECENTLY_PLAYED_URL =
   "https://api.spotify.com/v1/me/player/recently-played";
 
-async function getRecentlyPlayed(
-  authContextProps: AuthContextProps,
-) {
+async function getRecentlyPlayed() {
   const response = await fetch(RECENTLY_PLAYED_URL, {
     headers: {
-      Authorization: `Bearer ${authContextProps.authState.accessToken}`,
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     },
   });
-
-  if (response.status === 401) {
-    authContextProps.setAuthState({...authContextProps.authState, isAuthenticated: false});
-    throw new Error("Access token expired");
-  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch recently played tracks");
@@ -34,26 +23,21 @@ async function getRecentlyPlayed(
 }
 
 export function RecentlyPlayed() {
-  const authContextProps = useAuthHook();
-
   const recentlyPlayedQuery = useQuery<RecentlyPlayedResponse>({
-    queryKey: ['recentlyPlayed'],
-    queryFn: () => getRecentlyPlayed(authContextProps),
-    enabled: authContextProps.authState.isAuthenticated,
+    queryKey: ["recentlyPlayed"],
+    queryFn: () => getRecentlyPlayed(),
   });
 
-  if (!authContextProps.authState || !authContextProps.authState.isAuthenticated) {
-    return (
-      <Login />
-    );
-  }
-
   return (
-    <BaseLayout>
-      <h1 className={'text-3xl indent-4 font-bold px-3.5 py-10'}>Your Recently Played Tracks</h1>
+    <>
+      <h1 className={"text-3xl indent-4 font-bold px-3.5 py-10"}>
+        Your Recently Played Tracks
+      </h1>
 
       {recentlyPlayedQuery.isPending && (
-        <div className="text-center">Loading your recently played tracks...</div>
+        <div className="text-center">
+          Loading your recently played tracks...
+        </div>
       )}
 
       {recentlyPlayedQuery.isError && (
@@ -66,7 +50,10 @@ export function RecentlyPlayed() {
         <div className="max-w-5xl max-h-4xl mx-10 px-3.5">
           <div className="space-y-2">
             {recentlyPlayedQuery.data.items.map((item: RecentlyPlayedItem) => (
-              <div key={item.played_at} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
+              <div
+                key={item.played_at}
+                className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md"
+              >
                 <div className="flex items-center space-x-4">
                   {item.track.album.images[0] && (
                     <img
@@ -78,7 +65,9 @@ export function RecentlyPlayed() {
                   <div>
                     <h3 className="font-semibold">{item.track.name}</h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      {item.track.artists.map((artist: SpotifyArtist) => artist.name).join(', ')}
+                      {item.track.artists
+                        .map((artist: SpotifyArtist) => artist.name)
+                        .join(", ")}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-500">
                       {new Date(item.played_at).toLocaleString()}
@@ -90,7 +79,7 @@ export function RecentlyPlayed() {
           </div>
         </div>
       )}
-    </BaseLayout>
+    </>
   );
 }
 
