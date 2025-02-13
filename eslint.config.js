@@ -4,9 +4,8 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
-export default tseslint.config(
-  { ignores: ['dist'] },
-  {
+export default tseslint.config({
+    ignorePatterns: ['node_modules', 'dist'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -23,6 +22,32 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      "import/no-restricted-paths": [
+          "error",
+          {
+              zones: [
+                  {
+                      target: "./src/features/auth",
+                      from: "./src/features",
+                      except: ["auth"],
+                  },
+                  {
+                      target: "./src/features/",
+                      from: "./src/app",
+                  },
+                  {
+                      target: [
+                          "./src/components",
+                          "./src/hooks",
+                          "./src/lib",
+                          './src/types',
+                          './src/utils'
+                      ],
+                      from: ["./src/features", "./src/app"],
+                  }
+              ]
+          }
+      ],
     },
-  },
+  }
 )

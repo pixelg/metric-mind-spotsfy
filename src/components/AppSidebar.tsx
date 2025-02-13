@@ -1,43 +1,52 @@
-import {ChevronUp, Home, Search, Settings, User2} from "lucide-react";
+import { ChevronUp, Home, Search, Settings, User2 } from "lucide-react";
+import { NavLink, NavLinkRenderProps } from "react-router";
 
 import {
   Sidebar,
-  SidebarContent, SidebarFooter,
+  SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton, SidebarMenuItem,
-} from "@/components/ui/sidebar"
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 
 const items = [
   {
     title: "Home",
-    url: "/#",
-    icon: Home
+    url: "/app/dashboard",
+    icon: Home,
   },
   {
     title: "Player Queue",
-    url: "/player-queue",
-    icon: Search
+    url: "/app/player-queue",
+    icon: Search,
   },
   {
     title: "Recently Played",
-    url: "/recently-played",
-    icon: Search
+    url: "/app/recently-played",
+    icon: Search,
   },
   {
     title: "Settings",
     url: "#",
-    icon: Settings
-  }
-]
+    icon: Settings,
+  },
+];
 
 export function AppSidebar() {
+  const navLinkStyle = ({ isActive }: NavLinkRenderProps) => ({
+    fontWeight: isActive ? "bold" : "normal",
+  });
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -48,10 +57,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <NavLink to={item.url} style={navLinkStyle}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -85,5 +94,5 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
