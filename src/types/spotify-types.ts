@@ -11,6 +11,7 @@ export interface SpotifyImage {
 export interface SpotifyAlbum {
   images: SpotifyImage[];
   name: string;
+  release_date?: string;
 }
 export interface SpotifyTrack {
   id: string;

@@ -1,7 +1,7 @@
 export const DashboardRoute = () => {
   return (
-    <div className="container mx-auto p-10">
-      <h1>Welcome to Metric Mind Jams!</h1>
+    <div className="w-full h-screen container mx-auto p-10">
+      <h1 className="text-3xl font-bold mb-8">Welcome to Metric Mind Jams!</h1>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
         suscipit ligula et porttitor lacinia. Praesent blandit augue nec feugiat

@@ -31,7 +31,11 @@ const SpotifyAuthCallbackRoute = () => {
     }
   }, [navigate]);
 
-  return <p>Loading...</p>;
+  return (
+    <div className="w-full h-screen flex justify-center items-center">
+      <p>Exchanging code for token from Spotify...</p>
+    </div>
+  );
 };
 
 export default SpotifyAuthCallbackRoute;

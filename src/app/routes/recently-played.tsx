@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { spotifyApi } from "@/lib/spotify-api.ts";
 import {
   RecentlyPlayedItem,
   RecentlyPlayedResponse,
@@ -9,20 +10,16 @@ const RECENTLY_PLAYED_URL =
   "https://api.spotify.com/v1/me/player/recently-played";
 
 async function getRecentlyPlayed() {
-  const response = await fetch(RECENTLY_PLAYED_URL, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    },
-  });
+  const response = await spotifyApi.get(RECENTLY_PLAYED_URL);
 
-  if (!response.ok) {
+  if (response.status !== 200) {
     throw new Error("Failed to fetch recently played tracks");
   }
 
-  return response.json();
+  return response.data;
 }
 
-export function RecentlyPlayed() {
+export function RecentlyPlayedRoute() {
   const recentlyPlayedQuery = useQuery<RecentlyPlayedResponse>({
     queryKey: ["recentlyPlayed"],
     queryFn: () => getRecentlyPlayed(),
@@ -82,5 +79,3 @@ export function RecentlyPlayed() {
     </>
   );
 }
-
-export default RecentlyPlayed;

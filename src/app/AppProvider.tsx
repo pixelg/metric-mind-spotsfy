@@ -37,18 +37,7 @@ export const AppProvider = ({
         </div>
       }
     >
-      <QueryClientProvider client={queryClient}>
-        {/*<AuthLoader*/}
-        {/*  renderLoading={() => (*/}
-        {/*    <div className="flex h-screen w-screen items-center, justify-center">*/}
-        {/*      Loading Auth...*/}
-        {/*    </div>*/}
-        {/*  )}*/}
-        {/*>*/}
-        {/*  {children}*/}
-        {/*</AuthLoader>*/}
-        {children}
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </React.Suspense>
   );
 };

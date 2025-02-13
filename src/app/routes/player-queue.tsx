@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { spotifyApi } from "@/lib/spotify-api";
+
 import {
   SpotifyTrack,
   PlayerQueueResponse,
@@ -8,20 +10,16 @@ import {
 const PLAYER_QUEUE_URL = "https://api.spotify.com/v1/me/player/queue";
 
 async function getPlayerQueue() {
-  const response = await fetch(PLAYER_QUEUE_URL, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    },
-  });
+  const response = await spotifyApi.get(PLAYER_QUEUE_URL);
 
-  if (!response.ok) {
+  if (response.status !== 200) {
     throw new Error("Failed to fetch player queue");
   }
 
-  return response.json();
+  return response.data;
 }
 
-export function PlayerQueue() {
+export const PlayerQueueRoute = () => {
   const playerQueueQuery = useQuery<PlayerQueueResponse>({
     queryKey: ["playerQueue"],
     queryFn: () => getPlayerQueue(),
@@ -73,9 +71,9 @@ export function PlayerQueue() {
                         .map((artist: SpotifyArtist) => artist.name)
                         .join(", ")}
                     </p>
-                    {/*<p className="text-sm text-gray-400 dark:text-gray-500">*/}
-                    {/*  {new Date(item.played_at).toLocaleString()}*/}
-                    {/*</p>*/}
+                    <p className="text-sm text-gray-400 dark:text-gray-500">
+                      {item.album.release_date}
+                    </p>
                   </div>
                 </div>
               ),
@@ -85,6 +83,4 @@ export function PlayerQueue() {
       </div>
     </>
   );
-}
-
-export default PlayerQueue;
+};
