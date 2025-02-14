@@ -61,13 +61,6 @@ const createAppRouter = () =>
     },
   ]);
 
-/**
- * A convenience component that wraps the React Router `RouterProvider` with the
- * `createAppRouter` function, passing in the `useQueryClient` hook to provide the
- * `QueryClient` instance.
- *
- * @returns A `RouterProvider` component with the app router configuration.
- */
 export const AppRouter = () => {
   const router = useMemo(() => createAppRouter(), []);
   return <RouterProvider router={router} />;
