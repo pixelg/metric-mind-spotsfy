@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Outlet, useLocation } from "react-router";
-import BaseLayout from "@/components/BaseLayout.tsx";
+import ContentLayout from "@/components/ContentLayout.tsx";
 
 /**
  * The root content component for the app.
@@ -20,7 +20,7 @@ import BaseLayout from "@/components/BaseLayout.tsx";
 export const AppContent = () => {
   const location = useLocation();
   return (
-    <BaseLayout>
+    <ContentLayout>
       <Suspense
         fallback={
           <div className="flex size-full items-center justify-center">
@@ -32,6 +32,6 @@ export const AppContent = () => {
           <Outlet />
         </ErrorBoundary>
       </Suspense>
-    </BaseLayout>
+    </ContentLayout>
   );
 };

@@ -15,7 +15,7 @@ export const DashboardRoute = () => {
           </div>
         </div>
 
-        <p>
+        <p className="max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
           suscipit ligula et porttitor lacinia. Praesent blandit augue nec
           feugiat mattis. Integer efficitur, odio non ultrices dictum, felis
