@@ -32,7 +32,7 @@ export const AppProvider = ({
   return (
     <React.Suspense
       fallback={
-        <div className="flex h-screen w-screen items-center, justify-center">
+        <div className="flex h-screen w-screen items-center justify-center">
           Loading...
         </div>
       }
